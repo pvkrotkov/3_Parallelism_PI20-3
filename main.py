@@ -2,6 +2,7 @@ import random
 import time
 from multiprocessing import Process, Pool, Event
 import keyboard
+import sys
 
 
 # определение элемента
@@ -56,9 +57,9 @@ def main():
     size = int(input("Задайте размер матрицам: "))
     main_event = Process(target=general_operations, args=(size, ev))
     main_event.start()
-    while keyboard.read_key() == "p":
+    if keyboard.is_pressed('alt'):
         print("Exiting from program")
-        break
+        sys.exit()
     ev.clear()
     main_event.join()
 
