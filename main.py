@@ -36,6 +36,7 @@ def multiplier(base): #function that multiplies generated matrixes
                 proc.daemon = True
                 pipe_list.append(recv_end) #append "res" from function to output list
                 proc.start()
+                proc.join()
 
         output = [x.recv() for x in pipe_list] #decrypt output list
         output = [output[i:i+len(matrix_new[0])] for i in range(0, len(output), len(matrix_new[0]))] #creating matrix type list
