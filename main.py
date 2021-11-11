@@ -34,11 +34,11 @@ def take_input_length():
     flag = False
     while flag == False:
         try:
-            inpt = int(input('Enter the length of your matrix: \n'))
+            inpt = int(input('Enter the length of your matrix: \nEnter "0" to stop the program!\n'))
         except:
             print('Wrong input')
         else:
-            if inpt>0:
+            if inpt>=0:
                 flag = True
             else:
                 print('Enter number greater than 0!')
@@ -58,33 +58,37 @@ def write_result(name, matrix):
             file.writerow(row)
 
 def main():
-    #take the length of matrix from user
-    length = take_input_length()
+    
+    while True:
+        #take the length of matrix from user
+        length = take_input_length()
+        if length==0:
+            break
 
-    #generate two matrix
-    gen_matrix(length, 'matrix1.csv')
-    gen_matrix(length, 'matrix2.csv')
+        #generate two matrix
+        gen_matrix(length, 'matrix1.csv')
+        gen_matrix(length, 'matrix2.csv')
 
-    #open two matrix
-    matrix1 = open_matrix('matrix1.csv')
-    matrix2 = open_matrix('matrix2.csv')
+        #open two matrix
+        matrix1 = open_matrix('matrix1.csv')
+        matrix2 = open_matrix('matrix2.csv')
 
-    #define the amount of precesses by the length of matrix
-    proc_amount = Pool(processes=len(matrix1[0])*len(matrix2))
+        #define the amount of precesses by the length of matrix
+        proc_amount = Pool(processes=len(matrix1[0])*len(matrix2))
 
-    #put all the numbers in matrix into one colomn of numbers
-    elements = [((i,j), matrix1, matrix2) for i in range(len(matrix1[0])) for j in range(len(matrix2))]
+        #put all the numbers in matrix into one colomn of numbers
+        elements = [((i,j), matrix1, matrix2) for i in range(len(matrix1[0])) for j in range(len(matrix2))]
 
-    #multiply elements
-    result = proc_amount.map(multiply, elements)
+        #multiply elements
+        result = proc_amount.map(multiply, elements)
 
-    #bring back one colomn into matrix
-    result_matrix = [result[i:i+len(matrix2)] for i in range(0, len(matrix1[0])*len(matrix2), len(matrix2))]
+        #bring back one colomn into matrix
+        result_matrix = [result[i:i+len(matrix2)] for i in range(0, len(matrix1[0])*len(matrix2), len(matrix2))]
 
-    print(result_matrix)
+        print(result_matrix)
 
-    #write result matrix into a separate file
-    write_result('result_matrix.csv', result_matrix)
+        #write result matrix into a separate file
+        write_result('result_matrix.csv', result_matrix)
 
 
 if __name__ == '__main__':
