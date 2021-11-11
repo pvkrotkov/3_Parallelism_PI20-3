@@ -1,50 +1,45 @@
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 
-def element(index):
-    global A
-    global B    
-    i, j = index
+
+def elem(m):
     res = 0
-    # get a middle dimension
-    N = len(A[0]) or len(B)
-    for k in range(N):
-        res += A[i][k] * B[k][j]
+    m1, m2 = m
+    for y in range(len(m1)):
+        res += m1[y] * m2[y]
     return res
+def read_matr(file_name):
+    f = open(file_name, 'r')
+    l = [line.strip().split('\t') for line in f]
+    f.close()
+    return l
+def write_matr(ls, u, t):
+    f = open('Matrixs_multiplication.txt', 'w')
+    k = 0
+    for i in range(u):
+        if i != 0:
+            f.write('\n')
+        for j in range(t):
+            f.write(f"{new_ls[k]}\t")
+            k += 1
 
-def lenProc(m1, m2) -> int:
-    x = len(m1[0])
-    y = len(m2)
-    return x*y
 
-def matrix1() -> list:
-    result = []
-    with open("matrix1", "r") as f:
-        [result.append(list(map(int, i.split()))) for i in f]  
-    return result
+if __name__ == '__main__':
+    A = read_matr('first_matrix.txt')
+    B = read_matr('second_matrix.txt')
+    res_matr = [[0 for j in range(len(B))] for i in range(len(A))]
 
-def matrix2() -> list:
-    result = []
-    with open("matrix2", "r") as f:
-        [result.append(list(map(int, i.split()))) for i in f]
-    return result
+    ls = []
 
-def writeToFile(result):
-    open("result_matrix", "w").close()
-    with open("result_matrix", "a") as f:
-        [print(" ".join(str(x) for x in line), file = f) for line in result]
+    for i in range(len(A)):
+        for j in range(len(B[1])):
+            ls.append(([int(o) for o in A[i]], [int(k[j]) for k in B]))
 
-A = matrix1()
-B = matrix2()
-print(A)
-print(B)
-pool = Pool(processes = lenProc(A, B))
-
-k = pool.map(element, [(i, j) for i in range(len(A[0])) for j in range(len(B))])
-result = []
-for i in range(len(A[0])):
-    result.append([])
-    for j in range(len(B)):
-        result[-1].append(k[0])
-        k.remove(k[0])
-
-writeToFile(result)
+    p = Pool(cpu_count())
+    new_ls = p.map(elem, ls)
+    k = 0
+    write_matr(new_ls, len(res_matr), len(res_matr[0]))
+    for i in range(len(res_matr)):
+        for j in range(len(res_matr[i])):
+            res_matr[i][j] = new_ls[k]
+            k += 1
+    print(res_matr)
