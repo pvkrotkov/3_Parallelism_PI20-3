@@ -1,4 +1,7 @@
 from multiprocessing import Pool #Импорт библиотеки для работы с пулом процессов
+import sys
+from pynput import keyboard
+from random import *
 
 def write(mat): #Запись в матрицу
     global g
@@ -13,9 +16,33 @@ def write(mat): #Запись в матрицу
             fi.write(str(mat[q]) + "\n")
             b = 0
 
-def multiplication(x, y):  #Умножение матриц
-    rez = sum(i * k for i, k in zip(x, y))
-    return rez
+def Mult(index, matrix1, matrix2): #Умножение матриц
+    i, j = index
+    res = 0
+    n = len(matrix1[0]) or len(matrix2)
+    for k in range(n):
+        res = res + matrix1[i][k] * matrix2[k][j]
+    return res
+
+
+def MultiplyRandomMatrix(n, index):
+    while True: #Создаем бесконечный цикл для создания, перемножения и записи матриц
+        A = [sample([x for x in range(1,100)], n) for _ in range(n)] #создание матриц
+        B = [sample([x for x in range(1,100)], n) for _ in range(n)]
+        
+        i, j = index #Умножение матриц
+        res = 0
+        n = len(matrix1[0]) or len(matrix2)
+        for k in range(n):
+            res = res + A[i][k] * B[k][j]
+        return res  
+    
+        with open("C:/Users/User/result.txt", "w") as res_file: #Запись матриц
+            res = "\r".join([' '.join(row) for row in [[str(element) for element in row] for row in res]])
+            res_file.write(res)
+    if keyboard.is_pressed('x'): #Если нажата клавиша x, цикл прекратится 
+        print("Exiting from program")
+    sys.exit()
 
 if __name__ == '__main__':
     res = 0
