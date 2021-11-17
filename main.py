@@ -53,12 +53,12 @@ if __name__ == '__main__':
         if cut != -1:
             c = line[:cut]
             l = c.split(' ')
-            result = [int(item) for item in l]
-            matrix1.append(result)
+            res = [int(item) for item in l]
+            matrix1.append(res)
         else:
             a = line.split(' ')
-            result = [int(item) for item in a]
-            matrix1.append(result)
+            res = [int(item) for item in a]
+            matrix1.append(res)
     m1.close()
     m1 = open('matrix1.txt', 'r')
     line_1 = len(m1.readline().split(' ')) #записываем число столбцов первой матрицы
@@ -70,12 +70,12 @@ if __name__ == '__main__':
         if cut != -1:
             c = line[:cut]
             l = c.split(' ')
-            result = [int(item) for item in l]
-            matrix2.append(result)
+            res = [int(item) for item in l]
+            matrix2.append(res)
         else:
             li = line.split(' ')
-            result = [int(item) for item in li]
-            matrix2.append(result)
+            res = [int(item) for item in li]
+            matrix2.append(res)
     m2.close()
     m2 = open('matrix2.txt', 'r')
     line_2 = len(m2.readline().split(' ')) #записываем число столбцов второй матрицы
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     g = len(matrix1)
     print ('\nA = ', matrix1, len(matrix1), line_1)
     print ('B = ', matrix2, len(matrix2), line_2)
-    f = open('result.txt', 'w')
+    f = open('res.txt', 'w')
     f.write('')
     with Pool(4) as pool:
         matric = pool.starmap(multiplication, [(i, k) for i in matrix1 for k in zip(*matrix2)])
